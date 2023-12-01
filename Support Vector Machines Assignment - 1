@@ -1,0 +1,146 @@
+
+Q1. What is the mathematical formula for a linear SVM?
+Ans - The mathematical formula for a linear Support Vector Machine (SVM) can be represented as follows:
+
+Given a training dataset consisting of labeled examples (xᵢ, yᵢ), where xᵢ represents the feature vector of the i-th example, and yᵢ represents its corresponding class label (-1 or +1 for binary classification), the goal of a linear SVM is to find the optimal hyperplane that separates the two classes with the maximum margin.
+
+The equation of a hyperplane in a d-dimensional space can be defined as:
+
+wᵀx + b = 0
+
+where w is the weight vector perpendicular to the hyperplane, b is the bias term, and x is the input feature vector.
+
+Q2. What is the objective function of a linear SVM?
+Ans - The objective function of a linear SVM can be defined as:
+
+minimize ½||w||² + CΣ(max(0, 1 - yᵢ(wᵀxᵢ + b)))
+
+where ||w||² represents the squared Euclidean norm of the weight vector, C is a hyperparameter that controls the trade-off between the margin maximization and the classification error, and the summation term sums over all training examples.
+
+The objective function consists of two terms: the first term aims to maximize the margin (minimize ||w||²), and the second term is a hinge loss function that penalizes classification errors. The term max(0, 1 - yᵢ(wᵀxᵢ + b)) measures the distance between the prediction (wᵀxᵢ + b) and the correct class label yᵢ, ensuring that the examples are correctly classified and lie on the correct side of the margin.
+
+Q3. What is the kernel trick in SVM?
+Ans - The kernel trick is a technique used in Support Vector Machines (SVM) to efficiently handle non-linear classification problems without explicitly mapping the input features to a higher-dimensional space. It allows SVMs to implicitly operate in a high-dimensional feature space without the need for explicitly computing the transformed feature vectors.
+
+A kernel function calculates the inner product between two vectors in a transformed feature space without explicitly computing the transformed vectors themselves. It allows the SVM to implicitly operate in a higher-dimensional feature space, which may be non-linear, while still benefiting from the computational efficiency of working in the original input space.
+
+The kernel function is defined as:
+
+K(xᵢ, xⱼ) = ϕ(xᵢ) ⋅ ϕ(xⱼ)
+
+Q4. What is the role of support vectors in SVM Explain with example
+Ans - Support vectors are the training examples that lie closest to the decision boundary, known as the margin. They have a significant influence on the SVM model because they contribute to the determination of the decision boundary and the classification of new, unseen examples.
+
+To illustrate the role of support vectors, let's consider a binary classification problem with two classes, represented by positive (+) and negative (-) labels. Suppose we have a dataset with several training examples, and we want to train an SVM to separate the two classes.
+
+In a linear SVM, the goal is to find the hyperplane that maximizes the margin, which is the distance between the decision boundary and the support vectors. The support vectors are the examples that lie on or within the margin.
+
+During the training process, the SVM algorithm identifies the support vectors based on their proximity to the decision boundary. These examples contribute to the formulation of the decision boundary equation and help determine the optimal hyperplane that separates the classes.
+
+Once the SVM is trained, the support vectors are critical for the classification of new, unseen examples. When a new example needs to be classified, the SVM computes the distance between the example and the support vectors. The sign and magnitude of these distances are used to determine the class label of the new example.
+
+Q5. Illustrate with examples and graphs of Hyperplane, Marginal plane, Soft margin and Hard margin in SVM?
+Ans - Consider the following dataset:
+
+Class 1: (+) (2, 3) (3, 2) (3, 3) (4, 4)
+
+Class 2: (-) (1, 1) (2, 1) (2, 2) (3, 1)
+
+We'll train a linear SVM on this dataset and examine the different concepts.
+
+Hyperplane: The hyperplane is the decision boundary that separates the two classes. In a two-dimensional space, the hyperplane is a line. It is represented by the equation wᵀx + b = 0, where w is the weight vector perpendicular to the hyperplane, and b is the bias term. Let's say the trained SVM gives the following decision boundary equation: 2x + 3y - 9 = 0
+
+Marginal plane: The marginal planes are parallel planes to the hyperplane, which pass through the support vectors. These planes define the margin in SVM. The support vectors are the points closest to the decision boundary. Let's say the support vectors in our example are: (2, 3) and (2, 2)
+
+The marginal planes can be calculated by shifting the hyperplane equation based on the support vectors. Let's assume a margin of 1, and we obtain the following marginal plane equations:
+
+2x + 3y - 10 = 0 (upper marginal plane) 2x + 3y - 8 = 0 (lower marginal plane)
+
+Hard Margin: A hard margin SVM aims to find a decision boundary that perfectly separates the classes without any misclassifications. In a hard margin SVM, the margin is maximized, and no data points are allowed within the margin. This approach assumes that the data is linearly separable. In the graph, the solid line represents the decision boundary, which is the hyperplane in a hard margin SVM. The marginal planes are the dashed lines parallel to the decision boundary, defining the margin.
+
+Graph for Hard Margin SVM: Screenshot 2023-06-06 080030.png
+
+Soft Margin: A soft margin SVM allows for some misclassifications and data points within the margin. It introduces a trade-off between maximizing the margin and minimizing the classification error. Soft margin SVMs are useful when the data is not linearly separable or when there are outliers. In the graph, the solid line represents the decision boundary, which is the hyperplane in a soft margin SVM. The marginal planes are the dashed lines parallel to the decision boundary, defining the margin. Some data points are allowed within the margin or even misclassified.
+
+Graph for Soft Margin SVM: Screenshot 2023-06-06 080131.png
+
+In the soft margin SVM graph, the misclassified point (3, 1) is within the margin.
+
+Q6. SVM Implementation through Iris dataset.
+Load the iris dataset from the scikit-learn library and split it into a training set and a testing setl
+Train a linear SVM classifier on the training set and predict the labels for the testing setl
+Compute the accuracy of the model on the testing setl
+Plot the decision boundaries of the trained model using two of the featuresl
+Try different values of the regularisation parameter C and see how it affects the performance of the model.
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+# Loading iris dataset
+from sklearn.datasets import load_iris
+dataset = load_iris()
+# converting to dataframe
+df = pd.DataFrame(dataset.data, columns = dataset.feature_names)
+df.columns
+Index(['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)',
+       'petal width (cm)'],
+      dtype='object')
+# seprating Independent and dependent varaiables
+
+X = dataset.data[:,:2]
+y = dataset.target
+# Train test split
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size =0.25, random_state=42)
+# Applying SVM classifer 
+
+from sklearn.svm import SVC
+svc = SVC(kernel = 'linear')
+svc.fit(X_train, y_train)
+SVC(kernel='linear')
+In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook.
+On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.
+y_pred = svc.predict(X_test)
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+print(classification_report(y_test, y_pred))
+print(confusion_matrix(y_test, y_pred))
+print(accuracy_score(y_test, y_pred))
+              precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00        15
+           1       0.78      0.64      0.70        11
+           2       0.71      0.83      0.77        12
+
+    accuracy                           0.84        38
+   macro avg       0.83      0.82      0.82        38
+weighted avg       0.85      0.84      0.84        38
+
+[[15  0  0]
+ [ 0  7  4]
+ [ 0  2 10]]
+0.8421052631578947
+# Plot the decision boundary
+
+# Define the step size for the meshgrid
+h = 0.02
+
+# Determine the range of each feature
+x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+
+# Create a meshgrid using the above ranges and step size
+xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                     np.arange(y_min, y_max, h))
+Z = svc.predict(np.c_[xx.ravel(), yy.ravel()])
+Z = Z.reshape(xx.shape)
+plt.figure(figsize=(10, 8))
+plt.contourf(xx, yy, Z, alpha=0.8)  # Plot the decision boundary
+plt.scatter(X[:, 0], X[:, 1], c=y, edgecolors='k', cmap=plt.cm.Paired)  # Plot the data points
+plt.xlabel('Sepal length')
+plt.ylabel('Sepal width')
+plt.title('SVM Decision Boundary')
+plt.show()
+
+ 
